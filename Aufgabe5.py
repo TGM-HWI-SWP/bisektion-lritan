@@ -3,7 +3,7 @@ import math
 
 n = float(input("Gebe n an: "))
 
-def solver(func_str: str, n_val: float, a: float, b: float, tol: float = 1e-7) -> float:
+def solver(func_str: str, n_val: float, tol: float = 1e-7) -> float:
     """Findet eine Nullstelle mittels Bisektion.
     
     :param func_str: Die Funktion als String, z.B. "x**2 - n"
@@ -18,29 +18,30 @@ def solver(func_str: str, n_val: float, a: float, b: float, tol: float = 1e-7) -
     
     #Initialisierung a und b
     a = 0
-    b = 0.2 * n
+    b = 0.2 * n_val
 
-    # f(x) = x^2 - n
-    fa = f(a)
-    fb = f(b)
-    
-    if fa * fb >= 0: # falls 0.2 *n nicht für b reicht
+    if f(a) * f(b) >= 0: # falls 0.2 *n nicht für b reicht
         print("Fehler: Das gewählte Intervall [a, b] schließt die Nullstelle nicht ein!")
-        b = n + 1
+        b = n_val + 1
 
-    while (b-a) > tol: # Während a oder b 
-        m= (a+b)/2
-        fm=m**2 - n
-        
-        if fa*fm < 0:
-            b = m  
-            continue
+    while abs(f(m)) > tol:
+        m = (a + b) / 2
+            #Vorzeichen
+        if f(a) * f(m) < 0:
+            b = m # Nullstelle liegt links
+            x = True
         else:
-            a = m
-            continue
+            a = m  # Nullstelle liegt rechts
+            x = False
+        #print(f"Die Nullstelle für n={n_val} lautet: P({c:.4f} | 0)")
+        if x == True:
+            print(f"Die Nullstelle lautet {m}|{a}")
+        else:
+            print(f"Die Nullstelle lautet {b}|{m}")
+    return m
 
-    print(f"Die Nullstelle ist {a}|{b} ") 
-    
+
+        
 if __name__ == "__main__":
     
     solver()
