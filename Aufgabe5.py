@@ -1,12 +1,6 @@
 import matplotlib as mpl
 import math
 
-while True:
-    try:
-        inp_n: float = float(input("Gebe n an: "))
-        break 
-    except ValueError:
-        print("Falsche Eingabe: Bitte gebe eine Zahl ein!")
 
 def solver(func_str: str, n_val: float, tol: float = 1e-7) -> float:
     """Findet eine Nullstelle mittels Bisektion.
@@ -52,33 +46,40 @@ def solver(func_str: str, n_val: float, tol: float = 1e-7) -> float:
             a = m  # Nullstelle liegt rechts
     
     # Finalen y-Wert für die Anzeige berechnen
-    y_erg: float = f(m) 
-        
-    print(f"Die Nullstelle für n= {n_val} lautet:\n P({m}|{y_erg})")     
-    # :.2f rundet auf 2 Stellen, :.2e zeigt die kleine Zahl schöner an
-    print(f"\ngerundet??:\n P({m:.2f} | {0})\n")   
-
-
+    y_erg: float = f(m)
     return m
 
 
         
 if __name__ == "__main__":
-    
-    solver("x**2 - n", inp_n)
-    
-    test_werte = [25,81,144]
-    for n in test_werte:
-            print(f"\n--- Testlauf für n = {n} ---")
+    while True:
+        try:
+            inp_n: float = float(input("Gebe n an: "))
+            break 
+        except ValueError:
+            print("Falsche Eingabe: Bitte gebe eine Zahl ein!")
 
+
+    m_erg: float = solver("x**2 - n", inp_n)
+    # Wir berechnen y_erg kurz hier draußen für den Print
+    y_erg: float = m_erg**2 - inp_n
+
+    print("-" * 30)
+    print(f'''Die Nullstelle für n = {inp_n} lautet:
+        P({m_erg:.8f} | {y_erg:.2e})")
+        gerundet: P({m_erg:.2f} | 0)
+    ''')
+    print("-" * 30)
+
+    test_werte = [25,81,144]
+    print(f"Testlauf mit Testwerte\n{'n':>5} | {'Bisektion':>18} | {'Analytisch':>12} | {'Delta (Reg)':>10}")
+    print("-" * 80)
+
+    for n in test_werte:
             numerisch: float = solver("x**2 - n", n)
 
             # Analytische Lösung berechnen (Vergleichswert)
             analytisch: float = math.sqrt(n)
             # Abweichung berechnen
             abweichung: float = abs(numerisch - analytisch)
-
-            print(f"Numerisch:  {numerisch:.8f}")
-            print(f"Analytisch: {analytisch:.8f}")
-            print(f"Differenz:  {abweichung:.2e}\n--------------------------")    
-    
+            print(f"{n:5.1f} | {numerisch:18.10f} | {analytisch:12.1f} | {abweichung:10.2e}")
